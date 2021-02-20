@@ -3,23 +3,11 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConsoleModule } from 'nestjs-console';
 import { join } from 'path';
-import { AuthMiddleware } from './middleware/auth.middleware';
-import { SessionMiddleware } from './middleware/session.middleware';
-import { AuthModule } from './modules/auth/auth.module';
-import { BrandsModule } from './modules/brands/brands.module';
-import { CartsModule } from './modules/carts/carts.module';
-import { CategoryModule } from './modules/category/category.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { DotenvModule } from './modules/dotenv/dotenv.module';
 import { DotenvService } from './modules/dotenv/dotenv.service';
-import { EmailModule } from './modules/email/email.module';
-import { NotificationModule } from './modules/notification/notification.module';
-import { OrdersModule } from './modules/orders/orders.module';
-import { PaymentsModule } from './modules/payments/payments.module';
-import { ProductsModule } from './modules/products/products.module';
+import { PostCodesModule } from './modules/post-code/post-code.module';
 import { SchedulerModule } from './modules/scheduler/scheduler.module';
-import { SubCategoryModule } from './modules/sub-category/sub-category.module';
-import { UserModule } from './modules/user/user.module';
 import { UtilModule } from './modules/util/util.module';
 
 @Module({
@@ -55,19 +43,12 @@ import { UtilModule } from './modules/util/util.module';
     //   inject: [DotenvService],
     // }),
     DotenvModule,
-    AuthModule,
-    EmailModule,
+    // AuthModule,
+    // EmailModule,
     ConsoleModule,
-    NotificationModule,
+    // NotificationModule,
     forwardRef(() => UtilModule),
-    forwardRef(() => UserModule),
-    forwardRef(() => CategoryModule),
-    forwardRef(() => ProductsModule),
-    forwardRef(() => SubCategoryModule),
-    forwardRef(() => CartsModule),
-    forwardRef(() => PaymentsModule),
-    forwardRef(() => OrdersModule),
-    forwardRef(() => BrandsModule),
+    forwardRef(() => PostCodesModule),
     DatabaseModule,
     SchedulerModule,
   ],
@@ -76,7 +57,7 @@ import { UtilModule } from './modules/util/util.module';
 })
 export class AppModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer.apply(SessionMiddleware).forRoutes('*');
-    consumer.apply(AuthMiddleware).forRoutes('*');
+    // consumer.apply(SessionMiddleware).forRoutes('*');
+    // consumer.apply(AuthMiddleware).forRoutes('*');
   }
 }

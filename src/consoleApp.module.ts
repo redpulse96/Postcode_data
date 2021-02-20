@@ -1,19 +1,12 @@
-import { Module, MiddlewareConsumer, forwardRef } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { forwardRef, MiddlewareConsumer, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConsoleModule } from 'nestjs-console';
-
+import { DatabaseModule } from './modules/database/database.module';
 import { DotenvModule } from './modules/dotenv/dotenv.module';
 import { DotenvService } from './modules/dotenv/dotenv.service';
-import { UserModule } from './modules/user/user.module';
-import { SessionMiddleware } from './middleware/session.middleware';
-import { AuthModule } from './modules/auth/auth.module';
-import { EmailModule } from './modules/email/email.module';
-import { AuthMiddleware } from './middleware/auth.middleware';
-import { UtilModule } from './modules/util/util.module';
-import { NotificationModule } from './modules/notification/notification.module';
-import { DatabaseModule } from './modules/database/database.module';
 import { SchedulerModule } from './modules/scheduler/scheduler.module';
+import { UtilModule } from './modules/util/util.module';
 
 @Module({
   imports: [
@@ -44,12 +37,12 @@ import { SchedulerModule } from './modules/scheduler/scheduler.module';
       inject: [DotenvService],
     }),
     DotenvModule,
-    AuthModule,
-    EmailModule,
+    // AuthModule,
+    // EmailModule,
     ConsoleModule,
-    NotificationModule,
+    // NotificationModule,
     forwardRef(() => UtilModule),
-    forwardRef(() => UserModule),
+    // forwardRef(() => UserModule),
     DatabaseModule,
     SchedulerModule,
   ],
@@ -57,7 +50,7 @@ import { SchedulerModule } from './modules/scheduler/scheduler.module';
 })
 export class ConsoleAppModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer.apply(SessionMiddleware).forRoutes('*');
-    consumer.apply(AuthMiddleware).forRoutes('*');
+    // consumer.apply(SessionMiddleware).forRoutes('*');
+    // consumer.apply(AuthMiddleware).forRoutes('*');
   }
 }

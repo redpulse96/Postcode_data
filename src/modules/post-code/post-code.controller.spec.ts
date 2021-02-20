@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductsController } from './products.controller';
-import { Products } from './products.entity';
+import { PostCodesController } from './post-code.controller';
+import { PostCodes } from './post-code.entity';
 
 describe('Products Controller', () => {
-  let controller: ProductsController;
+  let controller: PostCodesController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TypeOrmModule.forFeature([Products])],
-      controllers: [ProductsController],
+      imports: [TypeOrmModule.forFeature([PostCodes])],
+      controllers: [PostCodesController],
     }).compile();
 
-    controller = module.get<ProductsController>(ProductsController);
+    controller = module.get<PostCodesController>(PostCodesController);
   });
 
   it('should be defined', () => {
