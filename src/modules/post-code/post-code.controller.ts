@@ -72,11 +72,10 @@ export class PostCodesController {
   @Get('/fetch-postcode-details')
   // @UseGuards(AuthGuard)
   public fetchPostCodeDetails(@Req() request: Request) {
-    const { user, query }: any = request;
+    const { query }: any = request;
     this.log.info('fetchPostCodeListByFilter.body');
     return this.postCodeService.fetchPostCodeDetails({
-      user,
-      product_id: query.product_id,
+      id: query.id,
     });
   }
 }
