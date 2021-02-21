@@ -21,7 +21,7 @@ export class PostCodes {
   @Column({
     type: 'decimal',
     precision: 8,
-    scale: 2,
+    scale: 4,
     default: 0,
   })
   public lat: number;
@@ -29,7 +29,7 @@ export class PostCodes {
   @Column({
     type: 'decimal',
     precision: 8,
-    scale: 2,
+    scale: 4,
     default: 0,
   })
   public long: number;
