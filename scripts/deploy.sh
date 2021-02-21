@@ -6,5 +6,5 @@ echo "Deploying built binary to server"
 npm run prebuild
 nest build
 pm2 restart all && pm2 logs
-# pm2 start ./dist/src/main.js -i 1 --name 'droid-zero:8080'
+# pm2 start ./dist/src/main.js -i 1 --name 'post_code:8080'
 echo "Complete"
