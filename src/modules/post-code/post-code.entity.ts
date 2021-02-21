@@ -4,6 +4,12 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 export class PostCodes {
   @PrimaryColumn()
   @PrimaryGeneratedColumn('uuid')
+  public id?: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
   public postcode?: string;
 
   @Column({
