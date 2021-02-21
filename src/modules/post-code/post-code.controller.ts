@@ -43,6 +43,7 @@ export class PostCodesController {
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
   public fetchPostCodeListByFilter(
+    @Query('id') id?: string,
     @Query('postcode') postcode?: string,
     @Query('cty') cty?: string,
     @Query('lat') lat?: number,
@@ -53,6 +54,7 @@ export class PostCodesController {
     @Query('bid') bid?: string,
   ) {
     const body: FetchPostCodeDetailsDto = {
+      id,
       postcode,
       cty,
       lat,

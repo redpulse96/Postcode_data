@@ -9,6 +9,7 @@ export interface CreatePostCodesDto {
   bid: string;
 }
 export interface FetchPostCodeDetailsDto {
+  id?: string;
   postcode?: string;
   cty?: string;
   lat?: number;

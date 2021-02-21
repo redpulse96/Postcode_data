@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/base.service';
-import { InterfaceList, ResponseCodes, Status } from 'src/shared/constants';
+import { InterfaceList, ResponseCodes } from 'src/shared/constants';
 import { Utils } from 'src/shared/util';
 import { Repository } from 'typeorm';
 import { DotenvService } from '../dotenv/dotenv.service';
@@ -30,6 +30,7 @@ export class PostCodeService extends BaseService<PostCodes> {
   ): Promise<InterfaceList.MethodResponse> {
     try {
       const createPostCodeObj: any = {
+        postcode: product_items?.postcode,
         cty: product_items?.cty,
         lat: product_items?.lat,
         long: product_items?.long,
@@ -65,26 +66,32 @@ export class PostCodeService extends BaseService<PostCodes> {
   ): Promise<InterfaceList.MethodResponse> {
     try {
       const filter: any = {};
+      if (post_codes_filter?.id) {
+        filter.id = post_codes_filter.id;
+      }
+      if (post_codes_filter?.postcode) {
+        filter.postcode = post_codes_filter.postcode;
+      }
       if (post_codes_filter?.cty) {
-        filter.id = post_codes_filter.cty;
+        filter.cty = post_codes_filter.cty;
       }
       if (post_codes_filter?.lat) {
-        filter.name = post_codes_filter.lat;
+        filter.lat = post_codes_filter.lat;
       }
       if (post_codes_filter?.long) {
-        filter.name = post_codes_filter.long;
+        filter.long = post_codes_filter.long;
       }
       if (post_codes_filter?.ward) {
-        filter.brand = post_codes_filter.ward;
+        filter.ward = post_codes_filter.ward;
       }
       if (post_codes_filter?.laua) {
-        filter.code = post_codes_filter.laua;
+        filter.laua = post_codes_filter.laua;
       }
       if (post_codes_filter?.lep) {
-        filter.code = post_codes_filter.lep;
+        filter.lep = post_codes_filter.lep;
       }
       if (post_codes_filter?.bid) {
-        filter.code = post_codes_filter.bid;
+        filter.bid = post_codes_filter.bid;
       }
       this.log.info('fetchPostCodesListByFilter.filter');
       this.log.debug(filter);
@@ -101,19 +108,6 @@ export class PostCodeService extends BaseService<PostCodes> {
       }
       this.log.info('postCodes');
       this.log.debug(postCodes);
-      postCodes.map((val: any) => {
-        val.prices = [
-          {
-            name: val.tax_type,
-            description: val.tax_type,
-            type: val.tax_type,
-            is_tax_applicable: val.is_tax_applicable,
-            base_value: val.base_price,
-            final_value: val.total_amount,
-            status: Status.Active,
-          },
-        ];
-      });
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,
@@ -129,7 +123,7 @@ export class PostCodeService extends BaseService<PostCodes> {
   ): Promise<InterfaceList.MethodResponse> {
     try {
       const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findByIds([input.product_id]),
+        this.findByIds([input.id]),
       );
       if (postCodesError) {
         this.log.error('postCodesError', postCodesError);
