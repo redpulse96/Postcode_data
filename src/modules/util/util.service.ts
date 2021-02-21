@@ -1,6 +1,6 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as cp from 'child_process';
-import { UserService } from 'src/modules/user/user.service';
+// import { UserService } from 'src/modules/user/user.service';
 import * as util from 'util';
 import { DotenvService } from '../dotenv/dotenv.service';
 import { BackendLogger } from '../logger/BackendLogger';
@@ -10,16 +10,16 @@ export class UtilService {
   private readonly logger = new BackendLogger(UtilService.name);
 
   constructor(
-    @Inject(forwardRef(() => UserService))
-    private readonly userService: UserService,
-    private readonly dotenvService: DotenvService,
+    // @Inject(forwardRef(() => UserService))
+    // private readonly // private readonly userService: UserService,
+    dotenvService: DotenvService,
   ) {}
 
   /**
    * Pauses execution for a given amount of ms
    */
   public async sleep(ms: number) {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => resolve(), ms);
     });
   }

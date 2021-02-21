@@ -3,8 +3,8 @@ import chalk from 'chalk';
 import moment from 'moment';
 import { SessionMiddleware } from 'src/middleware/session.middleware';
 import * as winston from 'winston';
-import { MomentFormat, REQUEST_ID, SESSION_USER } from '../../shared/constants';
-import { Users } from '../user/user.entity';
+import { MomentFormat, REQUEST_ID } from '../../shared/constants';
+// import { Users } from '../user/user.entity';
 
 const { Timestamp } = MomentFormat;
 
@@ -17,12 +17,12 @@ const customFormat = winston.format.combine(
 
 const formatter = (info) => {
   const requestId = SessionMiddleware.get(REQUEST_ID) || '-';
-  const user: Users = SessionMiddleware.get(SESSION_USER);
-  const email = user ? user.email : '-';
+  // const user: Users = SessionMiddleware.get(SESSION_USER);
+  // const email = user ? user.email : '-';
 
   return `${moment(info.timestamp).format(Timestamp)} ${chalk.magentaBright(
     requestId,
-  )} ${email} [${info.level}] [${chalk.green(info.context)}] ${info.message}`;
+  )} [${info.level}] [${chalk.green(info.context)}] ${info.message}`;
 };
 
 export class BackendLogger extends Logger {
