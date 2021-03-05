@@ -1,21 +1,21 @@
 export interface CreatePostCodesDto {
-  postcode?: string;
+  Pcds?: string;
   cty: string;
   lat: number;
   long: number;
   ward: string;
   laua: string;
-  lep: string;
-  bid: string;
+  lep1: string;
+  bid?: string;
 }
 export interface FetchPostCodeDetailsDto {
   id?: string;
-  postcode?: string;
+  Pcds?: string;
   cty?: string;
   lat?: number;
   long?: number;
   ward?: string;
   laua?: string;
-  lep?: string;
+  lep1?: string;
   bid?: string;
 }

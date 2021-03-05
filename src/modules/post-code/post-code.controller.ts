@@ -16,27 +16,9 @@ export class PostCodesController {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(
-    @Body('postcode') postcode: string,
-    @Body('cty') cty: string,
-    @Body('lat') lat: number,
-    @Body('long') long: number,
-    @Body('ward') ward: string,
-    @Body('laua') laua: string,
-    @Body('lep') lep: string,
-    @Body('bid') bid: string,
-  ) {
+  public registerPostCode(@Body('input') input: any[]) {
     this.log.info('registerPostCode.post_code_items');
-    const post_code_items: CreatePostCodesDto = {
-      postcode,
-      cty,
-      lat,
-      long,
-      ward,
-      laua,
-      lep,
-      bid,
-    };
+    const post_code_items: CreatePostCodesDto[] = [...input];
     return this.postCodeService.createPostCode(post_code_items);
   }
 
@@ -44,24 +26,24 @@ export class PostCodesController {
   // @UseGuards(AuthGuard)
   public fetchPostCodeListByFilter(
     @Query('id') id?: string,
-    @Query('postcode') postcode?: string,
+    @Query('Pcds') Pcds?: string,
     @Query('cty') cty?: string,
     @Query('lat') lat?: number,
     @Query('long') long?: number,
     @Query('ward') ward?: string,
     @Query('laua') laua?: string,
-    @Query('lep') lep?: string,
+    @Query('lep1') lep1?: string,
     @Query('bid') bid?: string,
   ) {
     const body: FetchPostCodeDetailsDto = {
       id,
-      postcode,
+      Pcds,
       cty,
       lat,
       long,
       ward,
       laua,
-      lep,
+      lep1,
       bid,
     };
     this.log.info('fetchPostCodeListByFilter.body');

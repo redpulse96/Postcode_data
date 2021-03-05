@@ -26,21 +26,24 @@ export class PostCodeService extends BaseService<PostCodes> {
   }
 
   public async createPostCode(
-    product_items: CreatePostCodesDto,
+    product_items: CreatePostCodesDto[],
   ): Promise<InterfaceList.MethodResponse> {
     try {
-      const createPostCodeObj: any = {
-        postcode: product_items?.postcode,
-        cty: product_items?.cty,
-        lat: product_items?.lat,
-        long: product_items?.long,
-        ward: product_items?.ward,
-        laua: product_items?.laua,
-        lep: product_items?.lep,
-        bid: product_items?.bid,
-      };
+      const createPostCodeObj: any[] = [];
+      product_items.forEach((val) => {
+        createPostCodeObj.push({
+          postcode: val?.Pcds,
+          cty: val?.cty,
+          lat: val?.lat,
+          long: val?.long,
+          ward: val?.ward,
+          laua: val?.laua,
+          lep: val?.lep1,
+          bid: val?.bid,
+        });
+      });
       const [createError, product]: any[] = await executePromise(
-        this.create(createPostCodeObj),
+        this.createAll(createPostCodeObj),
       );
       if (createError) {
         this.log.error('createError', createError);
@@ -69,8 +72,8 @@ export class PostCodeService extends BaseService<PostCodes> {
       if (post_codes_filter?.id) {
         filter.id = post_codes_filter.id;
       }
-      if (post_codes_filter?.postcode) {
-        filter.postcode = post_codes_filter.postcode;
+      if (post_codes_filter?.Pcds) {
+        filter.postcode = post_codes_filter.Pcds;
       }
       if (post_codes_filter?.cty) {
         filter.cty = post_codes_filter.cty;
@@ -87,8 +90,8 @@ export class PostCodeService extends BaseService<PostCodes> {
       if (post_codes_filter?.laua) {
         filter.laua = post_codes_filter.laua;
       }
-      if (post_codes_filter?.lep) {
-        filter.lep = post_codes_filter.lep;
+      if (post_codes_filter?.lep1) {
+        filter.lep = post_codes_filter.lep1;
       }
       if (post_codes_filter?.bid) {
         filter.bid = post_codes_filter.bid;
