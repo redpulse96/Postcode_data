@@ -26,33 +26,18 @@ export class EORA_usersService extends BaseService<EORA_users> {
   }
 
   public async createService(
-    product_items: CreateEORA_usersDto[],
+    input: CreateEORA_usersDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
-      const createEORA_lm1Obj: any[] = [];
-      product_items.forEach((val) => {
-        createEORA_lm1Obj.push({
-          user_id: val?.user_id,
-          user_live_postcode: val?.user_live_postcode,
-          user_work_postcode: val?.user_work_postcode,
-        });
-      });
-      const [createError, product]: any[] = await executePromise(
-        this.createAll(createEORA_lm1Obj),
-      );
-      if (createError) {
-        this.log.error('createError', createError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!product) {
-        this.log.info('!product');
-        return { response_code: ResponseCodes.SERVER_ERROR };
-      }
-      this.log.info('product');
-      this.log.debug(product);
+      const createEORA_lm1Obj: any = { ...input };
+      const eoraUsers: any = await this.create(createEORA_lm1Obj);
+
+      this.log.info('eoraUsers');
+      this.log.debug(eoraUsers);
 
       return {
         response_code: ResponseCodes.SUCCESS,
-        data: { product },
+        data: { eoraUsers },
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -60,41 +45,36 @@ export class EORA_usersService extends BaseService<EORA_users> {
   }
 
   public async fetchByFilter(
-    post_codes_filter: FetchEORA_usersDetailsDto,
+    input: FetchEORA_usersDetailsDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
       const filter: any = {};
-      if (post_codes_filter?.id) {
-        filter.id = post_codes_filter.id;
+      if (input?.id) {
+        filter.id = input.id;
       }
-      if (post_codes_filter?.user_id) {
-        filter.account_id = post_codes_filter.user_id;
+      if (input?.user_id) {
+        filter.account_id = input.user_id;
       }
-      if (post_codes_filter?.user_live_postcode) {
-        filter.impact_account_id = post_codes_filter.user_live_postcode;
+      if (input?.user_live_postcode) {
+        filter.impact_account_id = input.user_live_postcode;
       }
-      if (post_codes_filter?.user_work_postcode) {
-        filter.voucher_id = post_codes_filter.user_work_postcode;
+      if (input?.user_work_postcode) {
+        filter.voucher_id = input.user_work_postcode;
       }
       this.log.info('fetchPostCodesListByFilter.filter');
       this.log.debug(filter);
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findAll(filter),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
-        this.log.info('!postCodes?.length');
-        this.log.info(postCodes);
+      const eoraUsers: any = await this.findAll(filter);
+      if (!eoraUsers?.length) {
+        this.log.info('!eoraUsers?.length');
+        this.log.info(eoraUsers);
         return { response_code: ResponseCodes.BAD_REQUEST };
       }
-      this.log.info('postCodes');
-      this.log.debug(postCodes);
+      this.log.info('eoraUsers');
+      this.log.debug(eoraUsers);
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,
-        data: { postCodes },
+        data: { eoraUsers },
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -103,24 +83,19 @@ export class EORA_usersService extends BaseService<EORA_users> {
 
   public async fetchDetails(input: any): Promise<InterfaceList.MethodResponse> {
     try {
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findByIds([input.id]),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
-        this.log.info('!postCodes?.length');
-        this.log.info(postCodes);
+      const eoraUserDetails: any[] = await this.findByIds([input.id]);
+      if (!eoraUserDetails?.length) {
+        this.log.info('!eoraUserDetails?.length');
+        this.log.info(eoraUserDetails);
         return { response_code: ResponseCodes.BAD_REQUEST };
       }
-      this.log.info('postCodes');
-      this.log.debug(postCodes);
-      const finalPostCodes: any = { ...postCodes[0] };
+      this.log.info('eoraUserDetails');
+      this.log.debug(eoraUserDetails);
+      const finalEoraUserDetails: any = eoraUserDetails[0];
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,
-        data: { ...finalPostCodes },
+        data: { ...finalEoraUserDetails },
       };
     } catch (error) {
       return returnCatchFunction(error);

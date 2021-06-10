@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 // import { AuthGuard } from 'src/shared/guards/auth.guard';
 import { BackendLogger } from '../logger/BackendLogger';
 import {
@@ -16,42 +15,23 @@ export class EORA_lm2Controller {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(@Body('input') input: any[]) {
-    this.log.info('registerPostCode.post_code_items');
-    const post_code_items: CreateEORA_lm2sDto[] = [...input];
-    return this.EORA_lm2Service.createEORA_lm2(post_code_items);
+  public register(@Body() input: CreateEORA_lm2sDto) {
+    this.log.info('register.post_code_items');
+    return this.EORA_lm2Service.createService(input);
   }
 
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeListByFilter(
-    @Query('id') id?: number,
-    @Query('redeemed_user_id') redeemed_user_id?: string,
-    @Query('voucher_id') voucher_id?: string,
-    @Query('redeemed_venue_id') redeemed_venue_id?: string,
-    @Query('lm2_transaction_amount') lm2_transaction_amount?: number,
-    @Query('first_visit_outside_EORA') first_visit_outside_EORA?: string,
-  ) {
-    const body: FetchEORA_lm2DetailsDto = {
-      id,
-      redeemed_user_id,
-      voucher_id,
-      redeemed_venue_id,
-      lm2_transaction_amount,
-      first_visit_outside_EORA,
-    };
+  public fetchListByFilter(@Query() input?: FetchEORA_lm2DetailsDto) {
     this.log.info('fetchEORA_lm2ListByFilter.body');
-    this.log.info(body);
-    return this.EORA_lm2Service.fetchEORA_lm2ListByFilter(body);
+    this.log.info(input);
+    return this.EORA_lm2Service.fetchByFilter(input);
   }
 
   @Get('/fetch-details')
   // @UseGuards(AuthGuard)
-  public fetchDetails(@Req() request: Request) {
-    const { query }: any = request;
+  public fetchDetails(@Query() input: any) {
     this.log.info('fetchEORA_lm2Details.body');
-    return this.EORA_lm2Service.fetchEORA_lm2Details({
-      id: query.id,
-    });
+    return this.EORA_lm2Service.fetchDetails({ id: input.id });
   }
 }

@@ -15,43 +15,18 @@ export class EORA_venuesController {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(@Body('input') input: any[]) {
+  public register(@Body() input: CreateEORA_venuesDto) {
     this.log.info('registerPostCode.post_code_items');
-    const post_code_items: CreateEORA_venuesDto[] = [...input];
-    return this.service.createService(post_code_items);
+    this.log.info(input);
+    return this.service.createService(input);
   }
 
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeListByFilter(
-    @Query('id') id?: number,
-    @Query('venue_id') venue_id?: string,
-    @Query('venue_postcode') venue_postcode?: string,
-    @Query('account_id') account_id?: string,
-    @Query('no_employees') no_employees?: number,
-    @Query('culture_venue') culture_venue?: number,
-    @Query('sport_venue') sport_venue?: number,
-    @Query('high_street_venue') high_street_venue?: number,
-    @Query('charity_venue') charity_venue?: number,
-    @Query('family_venue') family_venue?: number,
-    @Query('tourist_venue') tourist_venue?: number,
-  ) {
-    const body: FetchEORA_venuesDetailsDto = {
-      id,
-      venue_id,
-      venue_postcode,
-      account_id,
-      no_employees,
-      culture_venue,
-      sport_venue,
-      high_street_venue,
-      charity_venue,
-      family_venue,
-      tourist_venue,
-    };
+  public fetchListByFilter(@Query() input?: FetchEORA_venuesDetailsDto) {
     this.log.info('fetchEORA_venuesListByFilter.body');
-    this.log.info(body);
-    return this.service.fetchByFilter(body);
+    this.log.info(input);
+    return this.service.fetchByFilter(input);
   }
 
   @Get('/fetch-details')

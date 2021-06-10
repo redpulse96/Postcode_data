@@ -12,23 +12,16 @@ export class lepsController {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(@Body('input') input: any[]) {
-    this.log.info('registerPostCode.post_code_items');
-    const post_code_items: CreatelepsDto[] = [...input];
-    return this.service.createService(post_code_items);
+  public register(@Body() input: CreatelepsDto) {
+    this.log.info('register.post_code_items');
+    return this.service.createService(input);
   }
 
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeListByFilter(
-    @Query('id') id?: number,
-    @Query('lep_ref') lep_ref?: string,
-    @Query('lep_name') lep_name?: string,
-  ) {
-    const body: FetchlepsDetailsDto = { id, lep_ref, lep_name };
+  public fetchListByFilter(@Query() input?: FetchlepsDetailsDto) {
     this.log.info('fetchlepsListByFilter.body');
-    this.log.info(body);
-    return this.service.fetchByFilter(body);
+    return this.service.fetchByFilter(input);
   }
 
   @Get('/fetch-details')

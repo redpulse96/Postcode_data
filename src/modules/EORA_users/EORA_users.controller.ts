@@ -15,29 +15,17 @@ export class EORA_usersController {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(@Body('input') input: any[]) {
-    this.log.info('registerPostCode.post_code_items');
-    const post_code_items: CreateEORA_usersDto[] = [...input];
-    return this.service.createService(post_code_items);
+  public register(@Body() input: CreateEORA_usersDto) {
+    this.log.info('register.post_code_items');
+    return this.service.createService(input);
   }
 
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeListByFilter(
-    @Query('id') id?: number,
-    @Query('user_id') user_id?: string,
-    @Query('user_live_postcode') user_live_postcode?: string,
-    @Query('user_work_postcode') user_work_postcode?: string,
-  ) {
-    const body: FetchEORA_usersDetailsDto = {
-      id,
-      user_id,
-      user_live_postcode,
-      user_work_postcode,
-    };
+  public fetchListByFilter(@Query() input?: FetchEORA_usersDetailsDto) {
     this.log.info('fetchEORA_usersListByFilter.body');
-    this.log.info(body);
-    return this.service.fetchByFilter(body);
+    this.log.info(input);
+    return this.service.fetchByFilter(input);
   }
 
   @Get('/fetch-details')

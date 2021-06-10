@@ -15,35 +15,17 @@ export class EROA_accountsController {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(@Body('input') input: any[]) {
-    this.log.info('registerPostCode.post_code_items');
-    const post_code_items: CreateEROA_accountsDto[] = [...input];
-    return this.service.createService(post_code_items);
+  public register(@Body() input: CreateEROA_accountsDto) {
+    this.log.info('register.post_code_items');
+    return this.service.createService(input);
   }
 
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeListByFilter(
-    @Query('id') id?: number,
-    @Query('account_id') account_id?: string,
-    @Query('account_postcode') account_postcode?: string,
-    @Query('no_employees') no_employees?: number,
-    @Query('account_name') account_name?: string,
-    @Query('account_type') account_type?: string,
-    @Query('venue_account') venue_account?: number,
-  ) {
-    const body: FetchEROA_accountsDetailsDto = {
-      id,
-      account_id,
-      account_postcode,
-      no_employees,
-      account_name,
-      account_type,
-      venue_account,
-    };
+  public fetchListByFilter(@Query() input?: FetchEROA_accountsDetailsDto) {
     this.log.info('fetchEROA_accountsListByFilter.body');
-    this.log.info(body);
-    return this.service.fetchByFilter(body);
+    this.log.info(input);
+    return this.service.fetchByFilter(input);
   }
 
   @Get('/fetch-details')

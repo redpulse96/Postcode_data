@@ -25,7 +25,7 @@ export class EORA_lm1Service extends BaseService<EORA_lm1> {
     super(EORA_lm1Repo);
   }
 
-  public async createEORA_lm1(
+  public async createService(
     product_items: CreateEORA_lm1sDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
@@ -43,7 +43,7 @@ export class EORA_lm1Service extends BaseService<EORA_lm1> {
     }
   }
 
-  public async fetchEORA_lm1ListByFilter(
+  public async fetchByFilter(
     post_codes_filter: FetchEORA_lm1DetailsDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
@@ -101,9 +101,7 @@ export class EORA_lm1Service extends BaseService<EORA_lm1> {
     }
   }
 
-  public async fetchEORA_lm1Details(
-    input: any,
-  ): Promise<InterfaceList.MethodResponse> {
+  public async fetchDetails(input: any): Promise<InterfaceList.MethodResponse> {
     try {
       const postCodes: any = await this.findByIds([input.id]);
       if (!postCodes?.length) {

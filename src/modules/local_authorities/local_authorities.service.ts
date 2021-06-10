@@ -26,32 +26,17 @@ export class local_authoritiesService extends BaseService<local_authorities> {
   }
 
   public async createService(
-    product_items: Createlocal_authoritiesDto[],
+    input: Createlocal_authoritiesDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
-      const createArr: any[] = [];
-      product_items.forEach((val) => {
-        createArr.push({
-          laua_ref: val?.laua_ref,
-          laua_name: val?.laua_name,
-        });
-      });
-      const [createError, product]: any[] = await executePromise(
-        this.createAll(createArr),
-      );
-      if (createError) {
-        this.log.error('createError', createError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!product) {
-        this.log.info('!product');
-        return { response_code: ResponseCodes.SERVER_ERROR };
-      }
+      const createArr: Createlocal_authoritiesDto = { ...input };
+      const product: any = await this.create(createArr);
       this.log.info('product');
       this.log.debug(product);
 
       return {
         response_code: ResponseCodes.SUCCESS,
-        data: { product },
+        data: { ...product },
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -59,28 +44,23 @@ export class local_authoritiesService extends BaseService<local_authorities> {
   }
 
   public async fetchByFilter(
-    post_codes_filter: Fetchlocal_authoritiesDetailsDto,
+    input: Fetchlocal_authoritiesDetailsDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
       const filter: any = {};
-      if (post_codes_filter?.id) {
-        filter.id = post_codes_filter.id;
+      if (input?.id) {
+        filter.id = input.id;
       }
-      if (post_codes_filter?.laua_ref) {
-        filter.laua_ref = post_codes_filter.laua_ref;
+      if (input?.laua_ref) {
+        filter.laua_ref = input.laua_ref;
       }
-      if (post_codes_filter?.laua_name) {
-        filter.laua_name = post_codes_filter.laua_name;
+      if (input?.laua_name) {
+        filter.laua_name = input.laua_name;
       }
       this.log.info('fetchPostCodesListByFilter.filter');
       this.log.debug(filter);
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findAll(filter),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
+      const postCodes: any[] = await this.findAll(filter);
+      if (!postCodes?.length) {
         this.log.info('!postCodes?.length');
         this.log.info(postCodes);
         return { response_code: ResponseCodes.BAD_REQUEST };
@@ -90,7 +70,7 @@ export class local_authoritiesService extends BaseService<local_authorities> {
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,
-        data: { postCodes },
+        data: [...postCodes],
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -99,20 +79,15 @@ export class local_authoritiesService extends BaseService<local_authorities> {
 
   public async fetchDetails(input: any): Promise<InterfaceList.MethodResponse> {
     try {
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findByIds([input.id]),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
+      const postCodes: any = await this.findByIds([input.id]);
+      if (!postCodes?.length) {
         this.log.info('!postCodes?.length');
         this.log.info(postCodes);
         return { response_code: ResponseCodes.BAD_REQUEST };
       }
       this.log.info('postCodes');
       this.log.debug(postCodes);
-      const finalPostCodes: any = { ...postCodes[0] };
+      const finalPostCodes: any = postCodes[0];
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,

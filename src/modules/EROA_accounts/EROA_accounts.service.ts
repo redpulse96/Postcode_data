@@ -26,36 +26,17 @@ export class EROA_accountsService extends BaseService<EROA_accounts> {
   }
 
   public async createService(
-    product_items: CreateEROA_accountsDto[],
+    input: CreateEROA_accountsDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
-      const createEORA_lm1Obj: any[] = [];
-      product_items.forEach((val) => {
-        createEORA_lm1Obj.push({
-          account_id: val?.account_id,
-          account_postcode: val?.account_postcode,
-          no_employees: val?.no_employees,
-          account_name: val?.account_name,
-          account_type: val?.account_type,
-          venue_account: val?.venue_account,
-        });
-      });
-      const [createError, product]: any[] = await executePromise(
-        this.createAll(createEORA_lm1Obj),
-      );
-      if (createError) {
-        this.log.error('createError', createError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!product) {
-        this.log.info('!product');
-        return { response_code: ResponseCodes.SERVER_ERROR };
-      }
-      this.log.info('product');
-      this.log.debug(product);
+      const createEORA_lm1Obj: any = { ...input };
+      const eoraAccount: any = await this.create(createEORA_lm1Obj);
+      this.log.info('eoraAccount');
+      this.log.debug(eoraAccount);
 
       return {
         response_code: ResponseCodes.SUCCESS,
-        data: { product },
+        data: { ...eoraAccount },
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -63,40 +44,35 @@ export class EROA_accountsService extends BaseService<EROA_accounts> {
   }
 
   public async fetchByFilter(
-    post_codes_filter: FetchEROA_accountsDetailsDto,
+    input: FetchEROA_accountsDetailsDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
       const filter: any = {};
-      if (post_codes_filter?.id) {
-        filter.id = post_codes_filter.id;
+      if (input?.id) {
+        filter.id = input.id;
       }
-      if (post_codes_filter?.account_id) {
-        filter.account_id = post_codes_filter.account_id;
+      if (input?.account_id) {
+        filter.account_id = input.account_id;
       }
-      if (post_codes_filter?.account_postcode) {
-        filter.account_postcode = post_codes_filter.account_postcode;
+      if (input?.account_postcode) {
+        filter.account_postcode = input.account_postcode;
       }
-      if (post_codes_filter?.no_employees) {
-        filter.no_employees = post_codes_filter.no_employees;
+      if (input?.no_employees) {
+        filter.no_employees = input.no_employees;
       }
-      if (post_codes_filter?.account_name) {
-        filter.account_name = post_codes_filter.account_name;
+      if (input?.account_name) {
+        filter.account_name = input.account_name;
       }
-      if (post_codes_filter?.account_type) {
-        filter.account_type = post_codes_filter.account_type;
+      if (input?.account_type) {
+        filter.account_type = input.account_type;
       }
-      if (post_codes_filter?.venue_account) {
-        filter.venue_account = post_codes_filter.venue_account;
+      if (input?.venue_account) {
+        filter.venue_account = input.venue_account;
       }
       this.log.info('fetchPostCodesListByFilter.filter');
       this.log.debug(filter);
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findAll(filter),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
+      const postCodes: any = await this.findAll(filter);
+      if (!postCodes?.length) {
         this.log.info('!postCodes?.length');
         this.log.info(postCodes);
         return { response_code: ResponseCodes.BAD_REQUEST };
@@ -106,7 +82,7 @@ export class EROA_accountsService extends BaseService<EROA_accounts> {
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,
-        data: { postCodes },
+        data: { ...postCodes },
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -115,20 +91,15 @@ export class EROA_accountsService extends BaseService<EROA_accounts> {
 
   public async fetchDetails(input: any): Promise<InterfaceList.MethodResponse> {
     try {
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findByIds([input.id]),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
+      const postCodes: any = await this.findByIds([input.id]);
+      if (!postCodes?.length) {
         this.log.info('!postCodes?.length');
         this.log.info(postCodes);
         return { response_code: ResponseCodes.BAD_REQUEST };
       }
       this.log.info('postCodes');
       this.log.debug(postCodes);
-      const finalPostCodes: any = { ...postCodes[0] };
+      const finalPostCodes: any = postCodes[0];
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,

@@ -15,23 +15,17 @@ export class local_authoritiesController {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(@Body('input') input: any[]) {
-    this.log.info('registerPostCode.post_code_items');
-    const post_code_items: Createlocal_authoritiesDto[] = [...input];
-    return this.service.createService(post_code_items);
+  public register(@Body() input: Createlocal_authoritiesDto) {
+    this.log.info('register.post_code_items');
+    return this.service.createService(input);
   }
 
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeListByFilter(
-    @Query('id') id?: number,
-    @Query('laua_ref') laua_ref?: string,
-    @Query('laua_name') laua_name?: string,
-  ) {
-    const body: Fetchlocal_authoritiesDetailsDto = { id, laua_ref, laua_name };
+  public fetchListByFilter(@Query() input?: Fetchlocal_authoritiesDetailsDto) {
     this.log.info('fetchlocal_authoritiesListByFilter.body');
-    this.log.info(body);
-    return this.service.fetchByFilter(body);
+    this.log.info(input);
+    return this.service.fetchByFilter(input);
   }
 
   @Get('/fetch-details')

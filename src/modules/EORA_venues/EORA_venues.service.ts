@@ -26,40 +26,17 @@ export class EORA_venuesService extends BaseService<EORA_venues> {
   }
 
   public async createService(
-    product_items: CreateEORA_venuesDto[],
+    input: CreateEORA_venuesDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
-      const createEORA_lm1Obj: any[] = [];
-      product_items.forEach((val) => {
-        createEORA_lm1Obj.push({
-          venue_id: val?.venue_id,
-          venue_postcode: val?.venue_postcode,
-          account_id: val?.account_id,
-          no_employees: val?.no_employees,
-          culture_venue: val?.culture_venue,
-          sport_venue: val?.sport_venue,
-          high_street_venue: val?.high_street_venue,
-          charity_venue: val?.charity_venue,
-          family_venue: val?.family_venue,
-          tourist_venue: val?.tourist_venue,
-        });
-      });
-      const [createError, product]: any[] = await executePromise(
-        this.createAll(createEORA_lm1Obj),
-      );
-      if (createError) {
-        this.log.error('createError', createError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!product) {
-        this.log.info('!product');
-        return { response_code: ResponseCodes.SERVER_ERROR };
-      }
-      this.log.info('product');
-      this.log.debug(product);
+      const createEORA_lm1Obj: CreateEORA_venuesDto = { ...input };
+      const eoraVenues: any = await this.create(createEORA_lm1Obj);
+      this.log.info('eoraVenues');
+      this.log.debug(eoraVenues);
 
       return {
         response_code: ResponseCodes.SUCCESS,
-        data: { product },
+        data: { eoraVenues },
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -67,52 +44,47 @@ export class EORA_venuesService extends BaseService<EORA_venues> {
   }
 
   public async fetchByFilter(
-    post_codes_filter: FetchEORA_venuesDetailsDto,
+    input: FetchEORA_venuesDetailsDto,
   ): Promise<InterfaceList.MethodResponse> {
     try {
       const filter: any = {};
-      if (post_codes_filter?.id) {
-        filter.id = post_codes_filter.id;
+      if (input?.id) {
+        filter.id = input.id;
       }
-      if (post_codes_filter?.venue_id) {
-        filter.venue_id = post_codes_filter.venue_id;
+      if (input?.venue_id) {
+        filter.venue_id = input.venue_id;
       }
-      if (post_codes_filter?.venue_postcode) {
-        filter.venue_postcode = post_codes_filter.venue_postcode;
+      if (input?.venue_postcode) {
+        filter.venue_postcode = input.venue_postcode;
       }
-      if (post_codes_filter?.account_id) {
-        filter.account_id = post_codes_filter.account_id;
+      if (input?.account_id) {
+        filter.account_id = input.account_id;
       }
-      if (post_codes_filter?.no_employees) {
-        filter.no_employees = post_codes_filter.no_employees;
+      if (input?.no_employees) {
+        filter.no_employees = input.no_employees;
       }
-      if (post_codes_filter?.culture_venue) {
-        filter.culture_venue = post_codes_filter.culture_venue;
+      if (input?.culture_venue) {
+        filter.culture_venue = input.culture_venue;
       }
-      if (post_codes_filter?.sport_venue) {
-        filter.sport_venue = post_codes_filter.sport_venue;
+      if (input?.sport_venue) {
+        filter.sport_venue = input.sport_venue;
       }
-      if (post_codes_filter?.high_street_venue) {
-        filter.high_street_venue = post_codes_filter.high_street_venue;
+      if (input?.high_street_venue) {
+        filter.high_street_venue = input.high_street_venue;
       }
-      if (post_codes_filter?.charity_venue) {
-        filter.charity_venue = post_codes_filter.charity_venue;
+      if (input?.charity_venue) {
+        filter.charity_venue = input.charity_venue;
       }
-      if (post_codes_filter?.family_venue) {
-        filter.family_venue = post_codes_filter.family_venue;
+      if (input?.family_venue) {
+        filter.family_venue = input.family_venue;
       }
-      if (post_codes_filter?.tourist_venue) {
-        filter.tourist_venue = post_codes_filter.tourist_venue;
+      if (input?.tourist_venue) {
+        filter.tourist_venue = input.tourist_venue;
       }
       this.log.info('fetchPostCodesListByFilter.filter');
       this.log.debug(filter);
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findAll(filter),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
+      const postCodes: any = await this.findAll(filter);
+      if (!postCodes?.length) {
         this.log.info('!postCodes?.length');
         this.log.info(postCodes);
         return { response_code: ResponseCodes.BAD_REQUEST };
@@ -122,7 +94,7 @@ export class EORA_venuesService extends BaseService<EORA_venues> {
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,
-        data: { postCodes },
+        data: [...postCodes],
       };
     } catch (error) {
       return returnCatchFunction(error);
@@ -131,20 +103,15 @@ export class EORA_venuesService extends BaseService<EORA_venues> {
 
   public async fetchDetails(input: any): Promise<InterfaceList.MethodResponse> {
     try {
-      const [postCodesError, postCodes]: any[] = await executePromise(
-        this.findByIds([input.id]),
-      );
-      if (postCodesError) {
-        this.log.error('postCodesError', postCodesError);
-        return { response_code: ResponseCodes.SERVICE_UNAVAILABLE };
-      } else if (!postCodes?.length) {
+      const postCodes: any = await this.findByIds([input.id]);
+      if (!postCodes?.length) {
         this.log.info('!postCodes?.length');
         this.log.info(postCodes);
         return { response_code: ResponseCodes.BAD_REQUEST };
       }
       this.log.info('postCodes');
       this.log.debug(postCodes);
-      const finalPostCodes: any = { ...postCodes[0] };
+      const finalPostCodes: any = postCodes[0];
 
       return {
         response_code: ResponseCodes.SUCCESSFUL_FETCH,

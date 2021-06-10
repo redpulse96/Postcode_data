@@ -15,39 +15,24 @@ export class EORA_lm3Controller {
 
   @Post('/register')
   // @UseGuards(AuthGuard)
-  public registerPostCode(@Body('input') input: any[]) {
-    this.log.info('registerPostCode.post_code_items');
-    const post_code_items: CreateEORA_lm3sDto[] = [...input];
-    return this.service.createService(post_code_items);
+  public register(@Body() input: CreateEORA_lm3sDto) {
+    this.log.info('register.post_code_items');
+    return this.service.createService(input);
   }
 
   @Get('/fetch-by-filter')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeListByFilter(
-    @Query('account_id') account_id?: string,
-    @Query('impact_account_id') impact_account_id?: string,
-    @Query('voucher_id') voucher_id?: string,
-    @Query('voucher_qty') voucher_qty?: number,
-    @Query('lm3_impact_value') lm3_impact_value?: number,
-    @Query('lm3_creation_date') lm3_creation_date?: Date,
-  ) {
-    const body: FetchEORA_lm3DetailsDto = {
-      account_id,
-      impact_account_id,
-      voucher_id,
-      voucher_qty,
-      lm3_impact_value,
-      lm3_creation_date,
-    };
+  public fetchListByFilter(@Query() input?: FetchEORA_lm3DetailsDto) {
     this.log.info('fetchEORA_lm3ListByFilter.body');
-    this.log.info(body);
-    return this.service.fetchByFilter(body);
+    this.log.info(input);
+    return this.service.fetchByFilter(input);
   }
 
   @Get('/fetch-details')
   // @UseGuards(AuthGuard)
-  public fetchDetails(@Query('id') id?: number) {
+  public fetchDetails(@Query() input?: any) {
     this.log.info('fetchEORA_lm3Details.body');
-    return this.service.fetchDetails({ id });
+    const { id } = input;
+    return this.service.fetchDetails(id);
   }
 }
