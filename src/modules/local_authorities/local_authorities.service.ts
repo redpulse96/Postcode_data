@@ -11,7 +11,7 @@ import {
   Fetchlocal_authoritiesDetailsDto,
 } from './dto/local_authorities-input.dto';
 import { local_authorities } from './local_authorities.entity';
-const { executePromise, returnCatchFunction } = Utils;
+const { returnCatchFunction } = Utils;
 
 @Injectable()
 export class local_authoritiesService extends BaseService<local_authorities> {
