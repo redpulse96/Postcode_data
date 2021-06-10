@@ -51,9 +51,9 @@ export class PostCodesController {
     return this.postCodeService.fetchPostCodesListByFilter(body);
   }
 
-  @Get('/fetch-postcode-details')
+  @Get('/fetch-details')
   // @UseGuards(AuthGuard)
-  public fetchPostCodeDetails(@Req() request: Request) {
+  public fetchDetails(@Req() request: Request) {
     const { query }: any = request;
     this.log.info('fetchPostCodeListByFilter.body');
     return this.postCodeService.fetchPostCodeDetails({
